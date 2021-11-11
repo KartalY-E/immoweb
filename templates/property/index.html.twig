@@ -33,8 +33,8 @@
                 <td>{{ property.city }}</td>
                 <td>{{ property.street }}</td>
                 <td>
-                    <a href="{{ path('property_show', {'id': property.id}) }}">show</a>
-                    <a href="{{ path('property_edit', {'id': property.id}) }}">edit</a>
+                    <a href="{{ path('property_show', {'slug': property.slug}) }}">show</a>
+                    <a href="{{ path('property_edit', {'slug': property.slug}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

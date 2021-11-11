@@ -10,8 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Ramsey\Uuid\Uuid;
+use App\Services\FileUploader;
 
-#[Route('/property')]
 class PropertyController extends AbstractController
 {
     #[Route('/', name: 'property_index', methods: ['GET'])]
@@ -23,8 +24,8 @@ class PropertyController extends AbstractController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/new', name: 'property_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    #[Route('property/new', name: 'property_new', methods: ['GET', 'POST'])]
+    public function new(Request $request,FileUploader $fileUploader): Response
     {
         $property = new Property();
         $form = $this->createForm(PropertyType::class, $property);
@@ -32,7 +33,17 @@ class PropertyController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            
+            // Setting the user
             $property->setUser($this->getUser());
+
+            // unique id & set as Slug,Images folder
+            $uid = Uuid::uuid4();
+            $property->setSlug($uid);
+            
+            //upload the images
+            $fileUploader->uploadImageProgerty($property,$form['upload']->getData());
+
             $entityManager->persist($property);
             $entityManager->flush();
 
@@ -45,7 +56,7 @@ class PropertyController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'property_show', methods: ['GET'])]
+    #[Route('property/{slug}', name: 'property_show', methods: ['GET'])]
     public function show(Property $property): Response
     {
         return $this->render('property/show.html.twig', [
@@ -54,16 +65,19 @@ class PropertyController extends AbstractController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/{id}/edit', name: 'property_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Property $property): Response
+    #[Route('property/{slug}/edit', name: 'property_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, Property $property,FileUploader $fileUploader): Response
     {
         if ($property->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException();
         }
-        $form = $this->createForm(PropertyType::class, $property);
+        $form = $this->createForm(PropertyType::class, $property, ['property_id' => $property->getId()]);
         $form->handleRequest($request);
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
+
+            //upload the images
+            $fileUploader->uploadImageProgerty($property,$form['upload']->getData());
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('property_index', [], Response::HTTP_SEE_OTHER);
@@ -76,7 +90,7 @@ class PropertyController extends AbstractController
     }
 
     #[IsGranted('ROLE_USER')]
-    #[Route('/{id}', name: 'property_delete', methods: ['POST'])]
+    #[Route('property/{slug}', name: 'property_delete', methods: ['POST'])]
     public function delete(Request $request, Property $property): Response
     {
         if ($property->getUser() !== $this->getUser()) {

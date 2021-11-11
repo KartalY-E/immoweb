@@ -1,4 +1,24 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+
+    {{ form_row(form.price) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.bedroom) }}
+    {{ form_row(form.bathroom) }}
+    {{ form_row(form.squareMeters) }}
+    {{ form_row(form.buildYear) }}
+    {{ form_row(form.city) }}
+    {{ form_row(form.street) }}
+    {{ form_row(form.propertyType) }}
+    {{ form_row(form.upload) }}
+    {{ form_row(form.images) }}
+
+    {% if form.images.vars.data.owner.images|default(null) %}
+        {% for image in form.images.vars.data.owner.images %}
+
+            <img src="{{ asset('uploads/' ~ image.filename)  }}">
+        {% endfor %}
+    {% endif %}
+    
+
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
