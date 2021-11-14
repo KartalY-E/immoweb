@@ -1,0 +1,24 @@
+.card {
+    color: black;
+    width: 18rem;
+    height: 450px;
+    margin: 10PX;
+}
+
+.card-link {
+    text-decoration: none;
+
+}
+
+.card-img-top {
+    height: 220px;
+}
+
+.list-group-item {
+    padding-left: 0px;
+    font-weight: 500;
+}
+.list-group-item>svg {
+    width: auto;
+    height: 20px;
+}

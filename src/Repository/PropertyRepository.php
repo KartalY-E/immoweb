@@ -19,6 +19,45 @@ class PropertyRepository extends ServiceEntityRepository
         parent::__construct($registry, Property::class);
     }
 
+    public function propertiesFilter($price, $bedroom, $bathroom, $city, $propertyType)
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->andWhere('p.propertyType = :propertyType')
+            ->orderBy('p.id', 'ASC')
+            ->setParameter('propertyType', $propertyType);
+        // ->setMaxResults(10);
+
+        if ($price != "") {
+            $qb->setParameter('price', $price);
+            $qb->andWhere('p.price <= :price');
+        }
+
+        if ($bedroom == '4') {
+            $qb->setParameter('bedroom', $bedroom);
+            $qb->andWhere('p.bedroom >= :bedroom');
+        } elseif ($bedroom != 0) {
+            $qb->setParameter('bedroom', $bedroom);
+            $qb->andWhere('p.bedroom = :bedroom');
+        }
+
+        if ($bathroom == 4) {
+            $qb->setParameter('bathroom', $bathroom);
+            $qb->andWhere('p.bathroom >= :bathroom');
+        } elseif ($bathroom != 0) {
+            $qb->setParameter('bathroom', $bathroom);
+            $qb->andWhere('p.bathroom = :bathroom');
+        }
+
+        if ($city != 0) {
+            $qb->setParameter('city', $city);
+            $qb->andWhere('p.city = :city');
+        }
+
+        $query = $qb->getQuery();
+        
+        return $query->execute();
+    }
+
     // /**
     //  * @return Property[] Returns an array of Property objects
     //  */
@@ -34,6 +73,7 @@ class PropertyRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+    
     */
 
     /*

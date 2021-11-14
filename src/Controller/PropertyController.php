@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Property;
+use App\Form\PropertyFilterType;
 use App\Form\PropertyType;
 use App\Repository\PropertyRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,17 +16,35 @@ use App\Services\FileUploader;
 
 class PropertyController extends AbstractController
 {
-    #[Route('/', name: 'property_index', methods: ['GET'])]
-    public function index(PropertyRepository $propertyRepository): Response
+    #[Route('/', name: 'property_index', methods: ['GET', 'POST'])]
+    public function index(Request $request, PropertyRepository $propertyRepository): Response
     {
+        $properties = $propertyRepository->findAll();
+        $form = $this->createForm(PropertyFilterType::class);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $data = $request->request->get('property_filter');
+
+            $properties = $propertyRepository->propertiesFilter(
+                $data['price'],
+                $data['bedroom'],
+                $data['bathroom'],
+                $data['city'],
+                $data['propertyType'],
+            );
+        }
+
         return $this->render('property/index.html.twig', [
-            'properties' => $propertyRepository->findAll(),
+            'properties' => $properties,
+            'form' => $form->createView(),
         ]);
     }
 
     #[IsGranted('ROLE_USER')]
     #[Route('property/new', name: 'property_new', methods: ['GET', 'POST'])]
-    public function new(Request $request,FileUploader $fileUploader): Response
+    public function new(Request $request, FileUploader $fileUploader): Response
     {
         $property = new Property();
         $form = $this->createForm(PropertyType::class, $property);
@@ -33,16 +52,16 @@ class PropertyController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
-            
+
             // Setting the user
             $property->setUser($this->getUser());
 
             // unique id & set as Slug,Images folder
             $uid = Uuid::uuid4();
             $property->setSlug($uid);
-            
+
             //upload the images
-            $fileUploader->uploadImageProgerty($property,$form['upload']->getData());
+            $fileUploader->uploadImageProgerty($property, $form['upload']->getData());
 
             $entityManager->persist($property);
             $entityManager->flush();
@@ -66,18 +85,18 @@ class PropertyController extends AbstractController
 
     #[IsGranted('ROLE_USER')]
     #[Route('property/{slug}/edit', name: 'property_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Property $property,FileUploader $fileUploader): Response
+    public function edit(Request $request, Property $property, FileUploader $fileUploader): Response
     {
         if ($property->getUser() !== $this->getUser()) {
             throw $this->createAccessDeniedException();
         }
         $form = $this->createForm(PropertyType::class, $property, ['property_id' => $property->getId()]);
         $form->handleRequest($request);
-        
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             //upload the images
-            $fileUploader->uploadImageProgerty($property,$form['upload']->getData());
+            $fileUploader->uploadImageProgerty($property, $form['upload']->getData());
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('property_index', [], Response::HTTP_SEE_OTHER);
