@@ -46,8 +46,8 @@ class PropertyFilterType extends AbstractType
             ])
             ->add('propertyType')
             ->add('submit', SubmitType::class, [
-                'attr' => ['class' => 'save'],
-                'label' => 'Search'
+                'attr' => ['class' => 'save btn-outline-dark'],
+                'label' => 'Search',
             ]);
     }
 

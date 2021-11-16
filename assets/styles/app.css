@@ -1,24 +1,89 @@
+/* PROPERTY CARD */
+
+.card-a {
+    text-decoration: none;
+}
+
 .card {
     color: black;
     width: 18rem;
     height: 450px;
+    height: auto;
     margin: 10PX;
-}
-
-.card-link {
-    text-decoration: none;
-
 }
 
 .card-img-top {
     height: 220px;
 }
 
+.list-group li:last-child {
+    border-bottom: none;
+}
+
+.list-group li:nth-child(1) {
+    border-top: none;
+}
+
+.list-group li {
+    border-left: 0px;
+    border-right: 0px;
+}
+
 .list-group-item {
     padding-left: 0px;
     font-weight: 500;
+    border-top: 1px solid grey;
 }
+
 .list-group-item>svg {
     width: auto;
     height: 20px;
+}
+
+/* PROPERTY FILTER FORM  */
+#property_filter {
+    margin: auto;
+    width: 70%;
+    padding: 0px;
+}
+
+#property_filter>div {
+    float: left;
+    padding: 5px;
+    position: relative;
+}
+
+#property_filter>div:nth-child(6) {
+    height: 78.7px;
+    width: 50px;
+}
+
+#property_filter>div:nth-child(6)>button {
+    position: absolute;
+    bottom: 5px;
+}
+
+
+/* EXTRA */
+table button {
+    width: 65px;
+}
+
+button:hover a {
+    color: white;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.nav-link {
+
+    color: black;
+}
+
+/* NAV  */
+.dropdown-menu {
+    padding: 0px;
 }
