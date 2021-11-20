@@ -15,7 +15,7 @@ class HomeController extends AbstractController
     {
         return $this->render('home/index.html.twig', [
             'user' => $this->getUser(),
-            'properties' => $propertyRepository->randomProperty(4)  
+            'properties' => $propertyRepository->randomProperty(4)
         ]);
     }
 }

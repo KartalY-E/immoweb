@@ -53,6 +53,7 @@ class PropertyType extends AbstractType
                 'mapped' => true,
                 'required' => false,
                 'choice_label' => 'original_filename',
+                'label' => false,
 
                 // used to render a select box, check boxes or radios
                 'multiple' => true,

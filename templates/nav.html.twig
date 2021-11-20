@@ -1,0 +1,33 @@
+{% set current_path = app.request.get('_route') %}
+<nav class="navbar navbar-expand-lg navbar-light">
+	<a class="navbar-brand" href="{{ path('app_home') }}">IMMO</a>
+
+
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+		<span class="navbar-toggler-icon"></span>
+	</button>
+	<div class="collapse navbar-collapse " id="navbarNav">
+		<a class="nav-link text-dark {{ current_path == 'app_home' ? 'active' }}" aria-current="page" href="{{ path('app_home') }}">Home</a>
+
+		<a class="nav-link text-dark {{ current_path == 'property_index' ? 'active'  }}" aria-current="page" href="{{ path('property_index') }}">Properties</a>
+		<ul class="navbar-nav ms-auto">
+			{% if app.user is null %}
+				<li class="nav-item">
+					<a class="nav-link text-dark {{ current_path == 'app_login' ? 'active'  }}" aria-current="page" href="{{ path('app_login') }}">Login</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link text-dark {{ current_path == 'app_register' ? 'active'  }}" aria-current="page" href="{{ path('app_register') }}">Register</a>
+				</li>
+			{% else %}
+				<li class="nav-item">
+					<a class="nav-link text-dark {{ current_path == 'profile' ? 'active'  }}" href="{{ path('profile') }}">
+						{{ app.user.lastname|capitalize }}&nbsp;{{ app.user.firstname|capitalize }}
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link text-dark" href="{{ path('app_logout') }}">Logout</a>
+				</li>
+			{% endif %}
+		</ul>
+	</div>
+</nav>
