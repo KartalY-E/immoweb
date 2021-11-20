@@ -1,58 +1,54 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Property{% endblock %}
+{% block title %}{% endblock %}
 
 {% block body %}
-    <h1>Property</h1>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ property.id }}</td>
-            </tr>
-            <tr>
-                <th>Price</th>
-                <td>{{ property.price }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ property.description }}</td>
-            </tr>
-            <tr>
-                <th>Bedroom</th>
-                <td>{{ property.bedroom }}</td>
-            </tr>
-            <tr>
-                <th>Bathroom</th>
-                <td>{{ property.bathroom }}</td>
-            </tr>
-            <tr>
-                <th>SquareMeters</th>
-                <td>{{ property.squareMeters }}</td>
-            </tr>
-            <tr>
-                <th>BuildYear</th>
-                <td>{{ property.buildYear ? property.buildYear|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>City</th>
-                <td>{{ property.city }}</td>
-            </tr>
-            <tr>
-                <th>Street</th>
-                <td>{{ property.street }}</td>
-            </tr>
-        </tbody>
-    </table>
+	<div class="row p-4">
+		<div class="col">
+			<h3>
+				<p class="text-center">{{ property.street|capitalize }},&nbsp;{{ property.city }}
+					<br>
+					&euro;
+					{{ property.price }}
+					-
+					{{ property.bedroom }}
+					Bedrooms -
+					{{ property.bathroom }}
+					Baths -
+					{{ property.squareMeters }}
+					<strong>
+						㎡
+					</strong>
+				</p>
+			</h3>
+		</div>
+	</div>
 
-    {% for image in property.images %}
-        <img src="{{ asset('uploads/' ~ image.filename)  }}">
-    {% endfor %}
+	<div class="row p-4">
+		<div class="col">
+			{% for image in property.images %}
+				<img src="{{ asset('uploads/' ~ image.filename) }}" width="100%">
+			{% endfor %}
+		</div>
+		<div class="col">
+			<p>
+				{{ property.description }}
+			</p>
 
-    <a href="{{ path('property_index') }}">back to list</a>
-
-    <a href="{{ path('property_edit', {'slug': property.slug}) }}">edit</a>
-
-    {{ include('property/_delete_form.html.twig') }}
-{% endblock %}
+			<h5>
+				Contact information
+			</h5>
+			<a href="mailto:{{ property.user.email }}">Email:&nbsp;{{ property.user.email }}</a>
+			<br>
+			<a href="tel:123-456-7890">123-456-7890</a>
+			<br>
+			{# {{ property.user.tel }} #}
+			<div style="width: 100%">
+				<iframe width="100%" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=100%25&amp;height=600&amp;hl=en&amp;q={{ property.street|replace({' ':'%20'}) }}+(Your%20Business%20Name)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed">
+					<a href="https://www.gps.ie/">gps devices</a>
+				</iframe>
+			</div>
+		</div>
+	</div>
+</div>{% endblock %}

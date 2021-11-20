@@ -6,10 +6,8 @@
 
 .card {
     color: black;
-    width: 18rem;
-    height: 450px;
+    width: auto;
     height: auto;
-    margin: 10PX;
 }
 
 .card-img-top {
@@ -55,7 +53,7 @@
 
 #property_filter>div:nth-child(6) {
     height: 78.7px;
-    width: 50px;
+    width: 85px;
 }
 
 #property_filter>div:nth-child(6)>button {
@@ -86,4 +84,42 @@ a {
 /* NAV  */
 .dropdown-menu {
     padding: 0px;
+}
+
+/* HOME */
+
+#home-img {
+    background-image: url('../../public/images/house2.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 800px;
+    filter: brightness(20%);
+    /* filter: grayscale(50%); */
+}
+
+#home-slogan {
+    margin: auto;
+    position: absolute;
+    top: calc(50% - 50px);
+    left: 0;
+    bottom: 0;
+    right: 0;
+    color: white;
+    font-weight: 500;
+    font-size: xxx-large;
+    text-align: center;
+}
+
+#home-arrow {
+    margin: auto;
+    position: absolute;
+    top: 80%;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    color: white;
+    font-weight: 900;
+    font-size: xxx-large;
+    text-align: center;
 }

@@ -58,6 +58,14 @@ class PropertyRepository extends ServiceEntityRepository
         return $query->execute();
     }
 
+    public function randomProperty($count)
+    {
+        return $this->createQueryBuilder('p')
+            ->setMaxResults($count)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Property[] Returns an array of Property objects
     //  */
