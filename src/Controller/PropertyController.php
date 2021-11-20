@@ -87,7 +87,8 @@ class PropertyController extends AbstractController
     #[Route('property/{slug}/edit', name: 'property_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Property $property, FileUploader $fileUploader): Response
     {
-        if ($property->getUser() !== $this->getUser()) {
+        //Check if is Admin/User that created it
+        if ((!$this->isGranted('ROLE_ADMIN')) && ($property->getUser() != $this->getUser())) {
             throw $this->createAccessDeniedException();
         }
         $form = $this->createForm(PropertyType::class, $property, ['property_id' => $property->getId()]);
@@ -108,11 +109,13 @@ class PropertyController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[IsGranted('ROLE_USER')]
     #[Route('property/{slug}', name: 'property_delete', methods: ['POST'])]
     public function delete(Request $request, Property $property): Response
     {
-        if ($property->getUser() !== $this->getUser()) {
+        //Check if is Admin/User that created it
+        if ((!$this->isGranted('ROLE_ADMIN')) && ($property->getUser() != $this->getUser())) {
             throw $this->createAccessDeniedException();
         }
         if ($this->isCsrfTokenValid('delete' . $property->getId(), $request->request->get('_token'))) {

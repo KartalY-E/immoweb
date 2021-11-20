@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Property index
+{% endblock %}
+
+{% block body %}
+	<h1>Property index</h1>
+
+	<button class="btn btn-outline-dark my-2">
+		<a href="{{ path('property_new') }}">Create new property</a>
+	</button>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Price</th>
+				<th>Description</th>
+				<th>Bedroom</th>
+				<th>Bathroom</th>
+				<th>SquareMeters</th>
+				<th>BuildYear</th>
+				<th>City</th>
+				<th>Street</th>
+				<th>actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for property in properties %}
+				<tr>
+					<td>{{ property.id }}</td>
+					<td>{{ property.price }}</td>
+					<td>{{ property.description }}</td>
+					<td>{{ property.bedroom }}</td>
+					<td>{{ property.bathroom }}</td>
+					<td>{{ property.squareMeters }}</td>
+					<td>{{ property.buildYear ? property.buildYear|date('Y-m-d H:i:s') : '' }}</td>
+					<td>{{ property.city }}</td>
+					<td>{{ property.street }}</td>
+					<td>
+						{% if property.images|length %}
+							<img src="{{ asset('uploads/' ~ property.images[0].filename) }}">
+						{% endif %}
+					</td>
+					<td>
+
+						<button class="btn btn-outline-dark my-2">
+							<a href="{{ path('property_show', {'slug': property.slug}) }}">show</a>
+						</button>
+						<button class="btn btn-outline-dark my-2">
+							<a href="{{ path('property_edit', {'slug': property.slug}) }}">edit</a>
+						</button>
+					</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="10">no records found</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+
+{% endblock %}

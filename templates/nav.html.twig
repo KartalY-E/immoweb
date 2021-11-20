@@ -19,6 +19,13 @@
 					<a class="nav-link text-dark {{ current_path == 'app_register' ? 'active'  }}" aria-current="page" href="{{ path('app_register') }}">Register</a>
 				</li>
 			{% else %}
+				{% if is_granted('ROLE_ADMIN') %}
+					<li class="nav-item">
+						<a class="nav-link text-dark {{ current_path == 'admin_property_index' ? 'active'  }}" href="{{ path('admin_property_index') }}">
+							Admin panel
+						</a>
+					</li>
+				{% endif %}
 				<li class="nav-item">
 					<a class="nav-link text-dark {{ current_path == 'profile' ? 'active'  }}" href="{{ path('profile') }}">
 						{{ app.user.lastname|capitalize }}&nbsp;{{ app.user.firstname|capitalize }}
