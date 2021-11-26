@@ -33,8 +33,8 @@ Small real-estate website. Where users can add there property for sale/rent.
   - Adding images to properties form UserAndPropertyFixtures
 
   <div align="center">
-      <img src="public/images/home-page.png" width="60%">
+      <img src="public/images/home-page.PNG" width="60%">
       <br>
       <br>
-      <img src="public/images/properties-page.png" width="60%">
+      <img src="public/images/properties-page.PNG" width="60%">
   </div>
