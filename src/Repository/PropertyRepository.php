@@ -66,6 +66,29 @@ class PropertyRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findOneByRandom()
+    {
+        $id_limits = $this->createQueryBuilder('Property')
+            ->select('MIN(Property.id)', 'MAX(Property.id)')
+            ->getQuery()
+            ->getOneOrNullResult();
+        $random_possible_id = rand($id_limits[1], $id_limits[2]);
+
+        return $this->createQueryBuilder('Property')
+            ->where('Property.id >= :random_id')
+            ->setParameter('random_id', $random_possible_id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+    public function findFirstId()
+    {
+        return $this->createQueryBuilder('Property')
+            ->select('MIN(Property.id)')
+            ->getQuery()
+            ->getOneOrNullResult();
+}
+
     // /**
     //  * @return Property[] Returns an array of Property objects
     //  */

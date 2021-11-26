@@ -5,8 +5,7 @@
 
 {% block body %}
 	<h1>Properties</h1>
-	<div
-		class="mx-auto">
+	<div class="mx-auto">
 		{{ form_start(form) }}
 		<div id="property_filter">
 			{{ form_errors(form) }}
@@ -22,15 +21,18 @@
 		{{ form_end(form) }}
 		<div class="clearfix"></div>
 	</div>
-	<div class="card-deck py-4">
-		<div class="d-flex justify-content-center">
-			<div class="row justify-content-md-center">
+	<div class="card-deck">
+		<div class="justify-content-center my-4">
+			<div class="row justify-content-md-left ">
 				{% for property in properties %}
 					{{ include('property/card.html.twig') }}
 				{% else %}
 					<p>no records</p>
 				{% endfor %}
 			</div>
+		</div>
+		<div class="navigation pagination justify-content-center">
+			{{ knp_pagination_render(properties) }}
 		</div>
 	</div>
 {% endblock %}

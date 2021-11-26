@@ -26,7 +26,7 @@
 	</div>
 
 	<div class="row p-4">
-		<div class="col">
+		<div class="col-sm-12 col-md-6 col-lg-6">
 			{% for image in property.images %}
 				<img src="{{ asset('uploads/' ~ image.filename) }}" width="100%">
 			{% endfor %}
@@ -41,7 +41,7 @@
 			</h5>
 			<a href="mailto:{{ property.user.email }}">Email:&nbsp;{{ property.user.email }}</a>
 			<br>
-			<a href="tel:123-456-7890">123-456-7890</a>
+			<a href="tel:{{ property.user.phone }}">Tel:&nbsp;{{ property.user.phone }}</a>
 			<br>
 			{# {{ property.user.tel }} #}
 			<div style="width: 100%">

@@ -55,12 +55,14 @@
     width: 200px;
     height: 150px;
 }
+
 .edit_properties_images>div>div>img {
     width: 200px;
-    height: auto;
+    height: 150px;
+    object-fit:scale-down
 }
 
-#property_images > div {
+#property_images>div {
     width: 200px;
     height: 150px;
 }
@@ -77,6 +79,12 @@
 
 
 /* EXTRA */
+
+svg{
+    vertical-align:sub;
+    fill: #282828;
+    margin: 3px;
+}
 table button {
     width: 65px;
 }
@@ -95,6 +103,11 @@ a {
 }
 
 /* NAV  */
+
+.navbar-brand>img {
+    vertical-align: baseline;
+}
+
 .active {
     border-bottom: 3px black solid;
     padding: 0px;
@@ -167,4 +180,9 @@ a {
     font-weight: 900;
     font-size: xxx-large;
     text-align: center;
+}
+
+/* NAVIGATION  */
+.page-item.active{
+    border: none;
 }

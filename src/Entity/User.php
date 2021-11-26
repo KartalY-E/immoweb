@@ -48,8 +48,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\Length(
-     *      min = 9,
-     *      max = 10,
+     *      min = 10,
+     *      max = 11,
      *      minMessage = "Your phone number  must be at least 10 long",
      *      maxMessage = "Your phone number  must be 10 long")
      */
@@ -189,7 +189,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getPhone(): ?int
+    public function getPhone(): ?string
     {
         return $this->phone;
     }

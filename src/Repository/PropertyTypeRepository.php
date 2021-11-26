@@ -19,6 +19,22 @@ class PropertyTypeRepository extends ServiceEntityRepository
         parent::__construct($registry, PropertyType::class);
     }
 
+    public function findOneByRandom()
+    {
+        $id_limits = $this->createQueryBuilder('PropertyType')
+            ->select('MIN(PropertyType.id)', 'MAX(PropertyType.id)')
+            ->getQuery()
+            ->getOneOrNullResult();
+        $random_possible_id = rand($id_limits[1], $id_limits[2]);
+
+        return $this->createQueryBuilder('PropertyType')
+            ->where('PropertyType.id >= :random_id')
+            ->setParameter('random_id', $random_possible_id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     // /**
     //  * @return PropertyType[] Returns an array of PropertyType objects
     //  */

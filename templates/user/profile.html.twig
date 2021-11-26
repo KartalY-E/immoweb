@@ -11,14 +11,18 @@
 	</button>
 
 	<div class="card-deck py-4">
-		<div class="d-flex justify-content-center">
-			<div class="row justify-content-md-center">
-				{% for property in app.user.properties %}
+		<div class="justify-content-center mb-4">
+			<div class="row justify-content-md-left">
+				{% for property in properties %}
 					{{ include('property/card.html.twig',{'edit':'true'}) }}
 				{% else %}
 					<p>no records</p>
 				{% endfor %}
 			</div>
+
+		</div>
+		<div class="navigation pagination justify-content-center">
+			{{ knp_pagination_render(properties) }}
 		</div>
 	</div>
 {% endblock %}

@@ -13,13 +13,16 @@ use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Ramsey\Uuid\Uuid;
 use App\Services\FileUploader;
+use Knp\Component\Pager\PaginatorInterface;
 
 class PropertyController extends AbstractController
 {
     #[Route('/', name: 'property_index', methods: ['GET', 'POST'])]
-    public function index(Request $request, PropertyRepository $propertyRepository): Response
+    public function index(Request $request, PropertyRepository $propertyRepository, PaginatorInterface $paginator): Response
     {
-        $properties = $propertyRepository->findAll();
+        $query = $propertyRepository->findAll();
+
+        // $properties = $propertyRepository->findAll();
         $form = $this->createForm(PropertyFilterType::class);
 
         $form->handleRequest($request);
@@ -27,7 +30,7 @@ class PropertyController extends AbstractController
 
             $data = $request->request->get('property_filter');
 
-            $properties = $propertyRepository->propertiesFilter(
+            $query = $propertyRepository->propertiesFilter(
                 $data['price'],
                 $data['bedroom'],
                 $data['bathroom'],
@@ -35,11 +38,17 @@ class PropertyController extends AbstractController
                 $data['propertyType'],
             );
         }
+        $pagination = $paginator->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            8 /*limit per page*/
+        );
 
-        return $this->render('property/index.html.twig', [
-            'properties' => $properties,
+        $response =  $this->render('property/index.html.twig', [
+            'properties' => $pagination,
             'form' => $form->createView(),
         ]);
+        return $response;
     }
 
     #[IsGranted('ROLE_USER')]
@@ -66,7 +75,7 @@ class PropertyController extends AbstractController
             $entityManager->persist($property);
             $entityManager->flush();
 
-            return $this->redirectToRoute('property_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('profile', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('property/new.html.twig', [
@@ -100,7 +109,11 @@ class PropertyController extends AbstractController
             $fileUploader->uploadImageProgerty($property, $form['upload']->getData());
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('property_index', [], Response::HTTP_SEE_OTHER);
+            //Check if is Admin and redirect to admin panel
+            if ($this->isGranted('ROLE_ADMIN')) {
+                return $this->redirectToRoute('admin_property_index');
+            }
+            return $this->redirectToRoute('profile', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('property/edit.html.twig', [
@@ -124,6 +137,6 @@ class PropertyController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('property_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('profile', [], Response::HTTP_SEE_OTHER);
     }
 }
